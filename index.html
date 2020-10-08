@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        .mainDiv {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            background-color: #1098ad;
+        }
+        
+        .centerDiv {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        
+        h1 {
+            color: white;
+            font-size: 3rem;
+            text-shadow: 1px 2px 3px gray;
+        }
+        
+        h2 {
+            text-align: center;
+            font-size: 1.8rem;
+            margin: 10px 10px;
+        }
+        
+        textarea {
+            background-color: #444;
+            box-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
+            border-radius: 10px 10px 0 0;
+            border: 20px solid #34495e;
+            color: white;
+            font-size: 1.3rem;
+        }
+        
+        .mainbtn {
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 5px solid #63e6be;
+            background: #ecf0f1;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mainDiv">
+        <div class="centerDiv">
+            <h1>Welcome to Typing Speed Test</h1>
+            <h2 id="msg"></h2><br>
+            <textarea id="myWords" placeholder="Remeber, be nice." cols="100" rows="10" autocomplete="none"></textarea><br>
+            <button class="mainbtn" id="btn">Start</button>
+        </div>
+    </div>
+    <script>
+        const setOfWords = ["Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+            "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+            "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+        ];
+
+        const msg = document.getElementById('msg');
+        const typeWords = document.getElementById('myWords');
+        const btn = document.getElementById('btn');
+        let startTime, endTime;
+
+        const palyGames = () => {
+            let randomNumber = Math.floor(Math.random() * setOfWords.length);
+            msg.innerText = setOfWords[randomNumber];
+            let date = new Date;
+            startTime = date.getTime();
+            btn.innerText = 'Done';
+        }
+        const endPlay = () => {
+            let date = new Date;
+            endTime = date.getTime();
+            let totalTime = ((endTime - startTime) / 1000); //Timing Calculation
+            console.log(totalTime);
+
+            let totalStr = typeWords.value;
+            let wordCount = wordCounter(totalStr); // Typed words Calculation
+
+            let speed = Math.round((wordCount / totalTime) * 60); //Typed Speed test count
+
+            let finalMsg = "you types speeds at " + speed + " words per minutes.";
+
+            finalMsg += compareWords(msg.innerText, totalStr);
+            msg.innerText = finalMsg;
+        }
+
+        const compareWords = (str1, str2) => {
+            let words1 = str1.split(" ");
+            let words2 = str2.split(" ");
+            let ctn = 0;
+
+            words1.forEach(function(item, index) {
+                if (item == words2[index]) {
+                    ctn++;
+                }
+            })
+
+            let errorWords = (words1.length - ctn);
+            return (ctn + " correct out of words " + words1.length + " words and the total number of error are " + errorWords + ".");
+        }
+
+        const wordCounter = (str) => {
+            let response = str.split(" ").length;
+            console.log(response);
+            return response;
+
+        }
+
+        btn.addEventListener('click', function() {
+            if (this.innerText == 'Start') {
+                typeWords.disabled = false;
+                palyGames();
+            } else if (this.innerText == 'Done') {
+                typeWords.disabled = true;
+                btn.innerText = 'Start';
+                endPlay();
+            }
+        })
+    </script>
+</body>
+
+</html>
